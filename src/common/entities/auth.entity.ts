@@ -5,7 +5,7 @@ export class Auth {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'char', length: 255 })
+  @Column({ type: 'varchar' })
   token: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })

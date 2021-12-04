@@ -1,15 +1,16 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Req } from '@nestjs/common';
 
 import { AuthService } from './auth.service';
 import { LoginDto, RegisterDto } from './dto';
+import { IRequest } from './interfaces/request.interface';
 
 @Controller('/api/auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('/login')
-  async loginHandler(data: LoginDto) {
-    return this.authService.login(data);
+  async loginHandler(@Body() dto: LoginDto, @Req() req: IRequest) {
+    return this.authService.login(dto, req.user);
   }
 
   @Post('/register')

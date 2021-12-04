@@ -6,7 +6,7 @@ import { getMetadataArgsStorage } from 'typeorm';
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
-import { JwtService } from './auth/jwt.service';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -22,6 +22,7 @@ import { JwtService } from './auth/jwt.service';
       synchronize: true,
     }),
     AuthModule,
+    CommonModule,
   ],
   controllers: [AppController],
   providers: [AppService],

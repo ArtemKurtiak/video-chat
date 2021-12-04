@@ -1,43 +1,50 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { sign } from 'jsonwebtoken';
 
-import { Auth, User } from './entities';
+import { User } from './entities';
 import { LoginDto, RegisterDto } from './dto';
-import { IAuth, IUser } from './interfaces';
-import { constants } from '../common/constants';
+import { IUser } from './interfaces';
+import { JwtService, PasswordService } from '../common/services';
+import { IToken } from './interfaces/token.interface';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
-    @InjectRepository(Auth) private authRepository: Repository<Auth>,
+    private jwtService: JwtService,
+    private passwordService: PasswordService,
   ) {}
 
-  async generateToken(userId: number): Promise<IAuth> {
-    const token = sign({}, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRY,
-    });
+  async login(
+    dto: LoginDto,
+    user: IUser,
+  ): Promise<(IUser & IToken) | BadRequestException> {
+    const { password } = dto;
 
-    const auth = this.authRepository.create({
-      userId,
-      token,
-    });
+    await this.passwordService.comparePasswords(password, user.password.trim());
 
-    return this.authRepository.save(auth);
+    const token: IToken = await this.jwtService.generateToken(user.id);
+
+    return { ...user, ...token, password: null };
   }
 
-  async login(data: LoginDto) {
-    return 'Hello';
-  }
+  async register(dto: RegisterDto): Promise<IUser & IToken> {
+    const { password } = dto;
 
-  async register(dto: RegisterDto): Promise<IUser> {
-    const userData = this.userRepository.create(dto);
-    const user = await this.userRepository.save(userData);
+    const hashedPassword: string = await this.passwordService.hashPassword(
+      password,
+    );
 
-    const token = await this.generateToken(user.id);
+    const data: IUser = this.userRepository.create({
+      ...dto,
+      password: hashedPassword,
+    });
 
-    return { ...user, ...token };
+    const user: IUser = await this.userRepository.save(data);
+
+    const token: IToken = await this.jwtService.generateToken(user.id);
+
+    return { ...user, ...token, password: null };
   }
 }
