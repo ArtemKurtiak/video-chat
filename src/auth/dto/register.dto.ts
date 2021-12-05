@@ -13,4 +13,7 @@ export class RegisterDto {
   @IsNumber()
   @IsOptional()
   age?: number;
+
+  @IsString()
+  telephone: string;
 }

@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { sign } from 'jsonwebtoken';
+import { sign, verify } from 'jsonwebtoken';
 import { Repository } from 'typeorm';
 
 import { IAuth } from '../interfaces';
@@ -26,5 +26,13 @@ export class JwtService {
     await this.authRepository.save(auth);
 
     return { token };
+  }
+
+  async verifyToken(token: string) {
+    try {
+      await verify(token, process.env.JWT_SECRET);
+    } catch (e) {
+      throw new UnauthorizedException('Invalid token');
+    }
   }
 }

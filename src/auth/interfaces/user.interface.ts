@@ -5,4 +5,5 @@ export interface IUser {
   age?: number;
   id: number;
   createdAt: Date;
+  telephone: string;
 }

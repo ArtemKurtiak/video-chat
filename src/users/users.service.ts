@@ -16,4 +16,14 @@ export class UsersService {
 
     return users;
   }
+
+  async getUserDetails(id: number): Promise<IUser | null> {
+    const user = await this.userRepository.findOne({
+      where: {
+        id,
+      },
+    });
+
+    return user;
+  }
 }
