@@ -24,6 +24,9 @@ export class User {
   @Column({ type: 'varchar' })
   telephone: string;
 
+  @Column({ type: 'varchar', nullable: true })
+  gender: string;
+
   @OneToMany(() => Auth, (auth) => auth.userId)
   auths: [];
 }

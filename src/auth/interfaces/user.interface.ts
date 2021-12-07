@@ -6,4 +6,5 @@ export interface IUser {
   id: number;
   createdAt: Date;
   telephone: string;
+  gender: string;
 }

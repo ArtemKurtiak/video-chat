@@ -21,7 +21,11 @@ import { ChatModule } from './chat/chat.module';
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
       entities: getMetadataArgsStorage().tables.map((tbl) => tbl.target),
-      synchronize: true,
+      synchronize: false,
+      migrations: ['dist/src/migrations/*.ts'],
+      cli: {
+        migrationsDir: 'dist/src/migrations',
+      },
     }),
     AuthModule,
     CommonModule,
