@@ -1,5 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Auth } from '../../common/entities';
+import { Notification } from './notification.entity';
 
 @Entity()
 export class User {
@@ -29,4 +30,7 @@ export class User {
 
   @OneToMany(() => Auth, (auth) => auth.userId)
   auths: [];
+
+  @OneToMany(() => Notification, (notification) => notification.userId)
+  notifications: [];
 }
