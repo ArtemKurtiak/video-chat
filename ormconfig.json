@@ -1,14 +1,1 @@
-{
-  "type": "postgres",
-  "host": "localhost",
-  "port": 5432,
-  "username": "postgres",
-  "password": "root",
-  "database": "video-app",
-  "entities": ["./src/**/*.entity.ts"],
-  "migrationsTableName": "migration",
-  "migrations": ["src/migrations/*.ts"],
-  "cli": {
-    "migrationsDir": "src/migrations"
-  }
-}
+
