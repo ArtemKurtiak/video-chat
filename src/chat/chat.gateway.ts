@@ -11,7 +11,8 @@ import { Socket } from 'socket.io';
 import { Repository } from 'typeorm';
 
 import { User } from '../auth/entities';
-import { IAnswerUser, ICallUser } from './interfaces';
+import { IAnswerUser, ICallUser, IMessageUser } from './interfaces';
+import { Message } from './entities/message.entity';
 
 @WebSocketGateway()
 export class ChatGateway implements OnGatewayConnection {
@@ -20,6 +21,7 @@ export class ChatGateway implements OnGatewayConnection {
 
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
+    @InjectRepository(Message) private messageRepository: Repository<Message>,
   ) {}
 
   async handleConnection(socket: Socket): Promise<void> {
@@ -46,5 +48,17 @@ export class ChatGateway implements OnGatewayConnection {
     const { userId, signal } = data;
 
     this.server.to(userId).emit('answer', { signal });
+  }
+
+  @SubscribeMessage('message')
+  async sendMessage(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() data: IMessageUser,
+  ) {
+    const { to, message, from } = data;
+
+    await this.messageRepository.create({ to, from });
+
+    this.server.to(to).broadcast.emit('message', { message, from });
   }
 }

@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { CommonModule } from './common/common.module';
 import { UsersModule } from './users/users.module';
 import { ChatModule } from './chat/chat.module';
+import { MessagesModule } from './messages/messages.module';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { ChatModule } from './chat/chat.module';
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
       entities: getMetadataArgsStorage().tables.map((tbl) => tbl.target),
-      synchronize: false,
+      synchronize: true,
       migrations: ['dist/src/migrations/*.ts'],
       cli: {
         migrationsDir: 'dist/src/migrations',
@@ -31,6 +32,7 @@ import { ChatModule } from './chat/chat.module';
     CommonModule,
     UsersModule,
     ChatModule,
+    MessagesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
