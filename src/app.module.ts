@@ -27,6 +27,7 @@ import { MessagesModule } from './messages/messages.module';
       cli: {
         migrationsDir: 'dist/src/migrations',
       },
+      logging: true,
     }),
     AuthModule,
     CommonModule,

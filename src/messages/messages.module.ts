@@ -7,11 +7,12 @@ import { CheckAuthToken } from '../users/middlewares';
 import { Auth } from '../common/entities';
 import { CommonModule } from '../common/common.module';
 import { Message } from '../chat/entities';
+import { Chat } from '../chat/entities/chat.entity';
 
 @Module({
   controllers: [MessagesController],
   providers: [MessagesService],
-  imports: [TypeOrmModule.forFeature([Auth, Message]), CommonModule],
+  imports: [TypeOrmModule.forFeature([Auth, Message, Chat]), CommonModule],
 })
 export class MessagesModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {

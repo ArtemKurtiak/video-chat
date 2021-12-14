@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 
 import { MessagesService } from './messages.service';
 
@@ -6,8 +6,8 @@ import { MessagesService } from './messages.service';
 export class MessagesController {
   constructor(private messagesService: MessagesService) {}
 
-  @Get('/')
-  async getMessages() {
-    return this.messagesService.getMessages();
+  @Get('/:chatId')
+  async getMessages(@Param('chatId') chatId: number) {
+    return this.messagesService.getMessagesByChatId(chatId);
   }
 }

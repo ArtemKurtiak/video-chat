@@ -1,17 +1,21 @@
 import {
-  Column,
   Entity,
   PrimaryGeneratedColumn,
   JoinColumn,
   ManyToOne,
+  Column,
 } from 'typeorm';
 
 import { User } from '../../auth/entities';
+import { Chat } from './chat.entity';
 
 @Entity()
 export class Message {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({ type: 'varchar', nullable: true })
+  text: string;
 
   @ManyToOne(() => User)
   @JoinColumn({ referencedColumnName: 'id' })
@@ -20,4 +24,8 @@ export class Message {
   @ManyToOne(() => User)
   @JoinColumn({ referencedColumnName: 'id' })
   from: number;
+
+  @ManyToOne(() => Chat, (chat) => chat.messages)
+  @JoinColumn({ referencedColumnName: 'id' })
+  chat: Chat;
 }
