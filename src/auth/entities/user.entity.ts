@@ -1,6 +1,15 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  JoinColumn,
+  JoinTable,
+} from 'typeorm';
 import { Auth } from '../../common/entities';
 import { Notification } from './notification.entity';
+import { Chat } from '../../chat/entities/chat.entity';
 
 @Entity()
 export class User {
@@ -33,4 +42,7 @@ export class User {
 
   @OneToMany(() => Notification, (notification) => notification.userId)
   notifications: [];
+
+  @ManyToMany(() => Chat, (chat) => chat.users)
+  chats: [];
 }

@@ -19,6 +19,7 @@ export class MessagesService {
       .leftJoinAndSelect('chat.messages', 'message')
       .leftJoinAndSelect('message.to', 'messageTo')
       .leftJoinAndSelect('message.from', 'messageFrom')
-      .getMany();
+      .leftJoinAndSelect('chat.users', 'users')
+      .getOne();
   }
 }

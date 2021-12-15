@@ -1,5 +1,14 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  JoinColumn,
+  JoinTable,
+} from 'typeorm';
 import { Message } from './message.entity';
+import { User } from '../../auth/entities';
 
 @Entity()
 export class Chat {
@@ -8,6 +17,15 @@ export class Chat {
 
   @Column({ type: 'varchar' })
   name: string;
+
+  @ManyToMany(() => User, (user) => user.chats)
+  @JoinTable({
+    joinColumn: {
+      referencedColumnName: 'id',
+    },
+    name: 'user_chat',
+  })
+  users: User[];
 
   @OneToMany(() => Message, (message) => message.chat)
   messages: Message[];
