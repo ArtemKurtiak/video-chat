@@ -14,4 +14,5 @@ export interface IMessageUser {
   message: string;
   to: number;
   from: number;
+  chat: string;
 }

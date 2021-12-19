@@ -8,14 +8,18 @@ import { Auth } from '../common/entities';
 import { CommonModule } from '../common/common.module';
 import { Message } from '../chat/entities';
 import { Chat } from '../chat/entities/chat.entity';
+import { User } from '../auth/entities';
 
 @Module({
   controllers: [MessagesController],
   providers: [MessagesService],
-  imports: [TypeOrmModule.forFeature([Auth, Message, Chat]), CommonModule],
+  imports: [
+    TypeOrmModule.forFeature([Auth, Message, Chat, User]),
+    CommonModule,
+  ],
 })
 export class MessagesModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {
-    consumer.apply(CheckAuthToken).forRoutes('/api/messages');
+    consumer.apply(CheckAuthToken).forRoutes('/api/chats');
   }
 }

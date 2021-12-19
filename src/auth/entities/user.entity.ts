@@ -44,5 +44,11 @@ export class User {
   notifications: [];
 
   @ManyToMany(() => Chat, (chat) => chat.users)
+  @JoinTable({
+    joinColumn: {
+      referencedColumnName: 'id',
+    },
+    name: 'user_chat',
+  })
   chats: [];
 }

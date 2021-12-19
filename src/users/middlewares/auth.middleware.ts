@@ -37,6 +37,8 @@ export class CheckAuthToken implements NestMiddleware {
       throw new UnauthorizedException('Jwt token invalid');
     }
 
+    req.userId = authToken.userId;
+
     next();
   }
 }

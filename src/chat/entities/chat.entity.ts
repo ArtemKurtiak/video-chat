@@ -15,9 +15,6 @@ export class Chat {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar' })
-  name: string;
-
   @ManyToMany(() => User, (user) => user.chats)
   @JoinTable({
     joinColumn: {
