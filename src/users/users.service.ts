@@ -4,11 +4,13 @@ import { Repository } from 'typeorm';
 
 import { User } from '../auth/entities';
 import { IUser } from '../auth/interfaces';
+import { RedisService } from '../common/services';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
+    private redisService: RedisService,
   ) {}
 
   async getUsers(): Promise<IUser[]> {
@@ -18,12 +20,14 @@ export class UsersService {
   }
 
   async getUserDetails(id: number): Promise<IUser | null> {
+    const { socketId } = await this.redisService.getUserDataByUserId(id);
+
     const user = await this.userRepository.findOne({
       where: {
         id,
       },
     });
 
-    return user;
+    return { ...user, socketId };
   }
 }

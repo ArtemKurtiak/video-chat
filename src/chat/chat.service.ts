@@ -6,6 +6,7 @@ import { Chat } from './entities/chat.entity';
 import { IMessageUser } from './interfaces';
 import { Message } from './entities';
 import { User } from '../auth/entities';
+import { RedisService } from '../common/services';
 
 @Injectable()
 export class ChatService {
@@ -13,6 +14,7 @@ export class ChatService {
     @InjectRepository(Chat) private chatRepository: Repository<Chat>,
     @InjectRepository(Message) private messageRepository: Repository<Message>,
     @InjectRepository(User) private userRepository: Repository<User>,
+    private redisService: RedisService,
   ) {}
 
   async sendMessage(dto: IMessageUser) {
@@ -42,10 +44,10 @@ export class ChatService {
         users: [toUser, fromUser],
       });
 
-      await this.messageRepository.insert({
+      await this.redisService.sendMessage({
         to,
         from,
-        chat,
+        chat: chat.id,
       });
 
       await this.chatRepository.save(chat);
@@ -53,6 +55,10 @@ export class ChatService {
       return;
     }
 
-    await this.messageRepository.insert({ to, from, chat: chatExists });
+    await this.redisService.sendMessage({
+      to,
+      from,
+      chat: chatExists.id,
+    });
   }
 }

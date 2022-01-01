@@ -20,6 +20,7 @@ export class AuthService {
     dto: LoginDto,
     user: IUser,
   ): Promise<(IUser & IToken) | BadRequestException> {
+    console.log(dto);
     const { password } = dto;
 
     await this.passwordService.comparePasswords(password, user.password.trim());
@@ -30,6 +31,7 @@ export class AuthService {
   }
 
   async register(dto: RegisterDto): Promise<IUser & IToken> {
+    console.log(dto);
     const { password } = dto;
 
     const hashedPassword: string = await this.passwordService.hashPassword(

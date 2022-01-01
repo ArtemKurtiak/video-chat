@@ -14,6 +14,7 @@ import { User } from '../auth/entities';
 import { IAnswerUser, ICallUser, IMessageUser } from './interfaces';
 import { Message } from './entities';
 import { ChatService } from './chat.service';
+import { RedisService } from '../common/services';
 
 @WebSocketGateway({ path: '/messages' })
 export class ChatGateway implements OnGatewayConnection {
@@ -24,9 +25,19 @@ export class ChatGateway implements OnGatewayConnection {
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(Message) private messageRepository: Repository<Message>,
     private chatService: ChatService,
+    private redisService: RedisService,
   ) {}
 
   async handleConnection(socket: Socket): Promise<void> {
+    const {
+      handshake: {
+        auth: { userId },
+      },
+      id,
+    } = socket;
+
+    await this.redisService.updateUserSocketId(userId, id);
+
     const users = await this.userRepository.find({});
 
     socket.emit('users', users);
@@ -59,8 +70,18 @@ export class ChatGateway implements OnGatewayConnection {
   ) {
     const { to, message, from } = dto;
 
+    const { socketId } = await this.redisService.getUserDataByUserId(to);
+
     await this.chatService.sendMessage(dto);
 
-    this.server.to(to).broadcast.emit('message', { message, from });
+    const senderUser = await this.userRepository.findOne({
+      where: {
+        id: from,
+      },
+    });
+
+    this.server
+      .to(socketId)
+      .broadcast.emit('message', { message, from: senderUser });
   }
 }
