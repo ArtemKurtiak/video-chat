@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { createClient } from 'redis';
 
-const redis = createClient();
+const redis = createClient({ url: 'redis://redis:6379' });
 
 import { redisKeysEnum } from '../constants/redisKeys.enum';
 import { IMessageRedis, IUserRedis } from '../interfaces/redis.interface';

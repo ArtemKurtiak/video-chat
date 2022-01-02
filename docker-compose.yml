@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  app:
+     container_name: chat_backend
+     restart: always
+     build: .
+     ports:
+       - '5000:5000'
+     links:
+       - postgres
+       - redis
+  postgres:
+    image: postgres:alpine
+    restart: always
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+      POSTGRES_DB: "video-app"
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5432:5432"
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - "6379:6379"
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8080"
