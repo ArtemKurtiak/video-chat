@@ -22,6 +22,7 @@ export class CheckUserExistsByEmail implements NestMiddleware {
 
     const user = await this.userRepository.findOne({
       where: { email },
+      select: ['password', 'email', 'id'],
     });
 
     if (!user) {

@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { createClient } from 'redis';
 
 const redis = createClient();
 
 import { redisKeysEnum } from '../constants/redisKeys.enum';
 import { IMessageRedis, IUserRedis } from '../interfaces/redis.interface';
+import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class RedisService {
@@ -44,6 +45,10 @@ export class RedisService {
     const users = await this.get(redisKeysEnum.users);
 
     const userById = users.find((item: IUserRedis) => item.userId == userId);
+
+    if (!userById) {
+      throw new HttpException('User not Found', HttpStatus.NOT_FOUND);
+    }
 
     return userById;
   }

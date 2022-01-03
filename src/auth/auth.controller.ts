@@ -10,6 +10,7 @@ export class AuthController {
 
   @Post('/login')
   async loginHandler(@Body() dto: LoginDto, @Req() req: IRequest) {
+    console.log(dto, req.user);
     return this.authService.login(dto, req.user);
   }
 

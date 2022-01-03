@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { Message } from '../chat/entities';
-import { Chat } from '../chat/entities/chat.entity';
+import { Chat } from '../chat/entities';
 import { User } from '../auth/entities';
 import { RedisService } from '../common/services';
 
@@ -17,6 +17,16 @@ export class MessagesService {
   ) {}
 
   async getMessagesByChatId(chatId: number): Promise<any> {
+    const chatExists = await this.chatRepository.findOne({
+      where: {
+        id: chatId,
+      },
+    });
+
+    if (!chatExists) {
+      throw new HttpException('Chat not found', HttpStatus.NOT_FOUND);
+    }
+
     const dbMessages = await this.chatRepository
       .createQueryBuilder('chat')
       .where('chat.id = :id', { id: chatId })

@@ -1,8 +1,14 @@
+import { CallStatusesEnum } from '../enums';
+
 export interface ICallUser {
-  userId: string;
+  userId: number;
+  me: number;
   name: string;
   signal: any;
   phone: string;
+  status: CallStatusesEnum;
+  start: string;
+  end: string;
 }
 
 export interface IAnswerUser {

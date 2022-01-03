@@ -11,6 +11,7 @@ import { CommonModule } from './common/common.module';
 import { UsersModule } from './users/users.module';
 import { ChatModule } from './chat/chat.module';
 import { MessagesModule } from './messages/messages.module';
+import { CallModule } from './call/call.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { MessagesModule } from './messages/messages.module';
     UsersModule,
     ChatModule,
     MessagesModule,
+    CallModule,
   ],
   controllers: [AppController],
   providers: [AppService],

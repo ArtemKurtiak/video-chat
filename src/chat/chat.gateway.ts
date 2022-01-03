@@ -12,7 +12,7 @@ import { Repository } from 'typeorm';
 
 import { User } from '../auth/entities';
 import { IAnswerUser, ICallUser, IMessageUser } from './interfaces';
-import { Message } from './entities';
+import { Call, Message } from './entities';
 import { ChatService } from './chat.service';
 import { RedisService } from '../common/services';
 
@@ -21,9 +21,12 @@ export class ChatGateway implements OnGatewayConnection {
   @WebSocketServer()
   server;
 
+  userId: number;
+
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(Message) private messageRepository: Repository<Message>,
+    @InjectRepository(Call) private callRepository: Repository<Call>,
     private chatService: ChatService,
     private redisService: RedisService,
   ) {}
@@ -35,6 +38,8 @@ export class ChatGateway implements OnGatewayConnection {
       },
       id,
     } = socket;
+
+    this.userId = userId;
 
     await this.redisService.updateUserSocketId(userId, id);
 
@@ -48,9 +53,18 @@ export class ChatGateway implements OnGatewayConnection {
     @ConnectedSocket() socket: Socket,
     @MessageBody() data: ICallUser,
   ) {
-    const { userId, signal, name, phone } = data;
+    const { userId, signal, name, phone, status, end, start } = data;
 
-    this.server.to(userId).emit('call', { name, signal, phone });
+    await this.callRepository.insert({
+      status,
+      name,
+      end,
+      start,
+      toUser: userId,
+      startUser: this.userId,
+    });
+
+    await this.server.to(userId).emit('call', { name, signal, phone });
   }
 
   @SubscribeMessage('answer')
