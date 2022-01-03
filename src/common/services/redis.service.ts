@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { createClient } from 'redis';
 
-const redis = createClient({ url: 'redis://redis:6379' });
+const redis = createClient();
 
 import { redisKeysEnum } from '../constants/redisKeys.enum';
 import { IMessageRedis, IUserRedis } from '../interfaces/redis.interface';
@@ -18,6 +18,14 @@ export class RedisService {
 
   async set(key: string, value: any) {
     await redis.set(key, JSON.stringify(value));
+  }
+
+  async returnAndReplaceData(key: string, value: any) {
+    const data = await this.get(key);
+
+    await this.set(key, value);
+
+    return data;
   }
 
   async updateUserSocketId(userId: number, socketId: string) {
