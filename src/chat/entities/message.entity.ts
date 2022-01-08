@@ -4,6 +4,9 @@ import {
   JoinColumn,
   ManyToOne,
   Column,
+  CreateDateColumn,
+  AfterInsert,
+  getManager,
 } from 'typeorm';
 
 import { User } from '../../auth/entities';
@@ -28,4 +31,7 @@ export class Message {
   @ManyToOne(() => Chat, (chat) => chat.messages)
   @JoinColumn({ referencedColumnName: 'id' })
   chat: Chat;
+
+  @CreateDateColumn()
+  createdAt: Date;
 }

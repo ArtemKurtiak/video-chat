@@ -4,8 +4,9 @@ import {
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
-  JoinColumn,
   JoinTable,
+  AfterUpdate,
+  OneToOne,
 } from 'typeorm';
 import { Message } from './message.entity';
 import { User } from '../../auth/entities';
@@ -14,6 +15,9 @@ import { User } from '../../auth/entities';
 export class Chat {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({ type: 'varchar', default: 'Chat' })
+  name: string;
 
   @ManyToMany(() => User, (user) => user.chats)
   @JoinTable({

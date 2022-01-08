@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { getManager, Repository } from 'typeorm';
 
 import { Message } from '../chat/entities';
 import { Chat } from '../chat/entities';
@@ -42,11 +42,31 @@ export class MessagesService {
   }
 
   async getChats(userId: number) {
-    return this.chatRepository
+    const chats = await this.chatRepository
       .createQueryBuilder('chat')
       .leftJoin('chat.users', 'currentUser')
-      .where('currentUser.id = :userId', { userId })
       .leftJoinAndSelect('chat.users', 'user')
+      .where('currentUser.id = :userId', { userId })
       .getMany();
+
+    const chatsWithMessage = await Promise.all(
+      chats.map(async (item) => {
+        const message = await this.messagesRepository.findOne({
+          where: {
+            chat: item.id,
+          },
+          order: {
+            id: 'DESC',
+          },
+        });
+
+        return {
+          ...item,
+          lastMessage: message,
+        };
+      }),
+    );
+
+    return chatsWithMessage;
   }
 }
