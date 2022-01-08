@@ -30,4 +30,14 @@ export class UsersService {
 
     return { ...user, socketId };
   }
+
+  async getMe(userId: number): Promise<IUser | null> {
+    const user = await this.userRepository.findOne({
+      where: {
+        id: userId,
+      },
+    });
+
+    return user;
+  }
 }
