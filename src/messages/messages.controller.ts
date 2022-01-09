@@ -1,8 +1,10 @@
 import { Controller, Get, Param, Req } from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 import { MessagesService } from './messages.service';
 
 @Controller('/api/chats')
+@ApiBearerAuth()
 export class MessagesController {
   constructor(private messagesService: MessagesService) {}
 

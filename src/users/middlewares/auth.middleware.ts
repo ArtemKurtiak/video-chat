@@ -19,7 +19,9 @@ export class CheckAuthToken implements NestMiddleware {
   ) {}
 
   async use(req: IRequest, res: Response, next: NextFunction) {
-    const token: string = req.headers.authorization;
+    const { authorization } = req.headers;
+
+    const token = authorization?.split(' ')[1];
 
     if (!token) {
       throw new UnauthorizedException('Jwt token not found');

@@ -5,6 +5,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 import { CallService } from './call.service';
 import { ICall } from './interfaces';
@@ -16,6 +17,7 @@ export class CallController {
 
   @Get('/')
   @UsePipes(new ValidationPipe({ transform: true }))
+  @ApiBearerAuth()
   getCalls(@Query() query: GetCallsDto): Promise<ICall[]> {
     return this.callService.getCalls(query);
   }

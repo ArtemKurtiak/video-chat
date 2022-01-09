@@ -30,7 +30,6 @@ export class AuthService {
   }
 
   async register(dto: RegisterDto): Promise<IUser & IToken> {
-    console.log(dto);
     const { password } = dto;
 
     const hashedPassword: string = await this.passwordService.hashPassword(
