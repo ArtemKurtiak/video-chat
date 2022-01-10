@@ -8,6 +8,10 @@ import {
 import { AuthService } from './auth.service';
 import { LoginDto, RegisterDto } from './dto';
 import { IRequest } from './interfaces/request.interface';
+import {
+  SuccessLoginResponseExample,
+  SuccessRegisterResponseExample,
+} from '../docs';
 
 @Controller('/api/auth')
 export class AuthController {
@@ -18,12 +22,7 @@ export class AuthController {
     status: 200,
     description: 'Success login',
     schema: {
-      example: {
-        id: 1,
-        email: 'johndoe@gmail.com',
-        password: null,
-        token: 'Aez...',
-      },
+      example: SuccessLoginResponseExample,
     },
   })
   @ApiBadRequestResponse({
@@ -38,17 +37,7 @@ export class AuthController {
   @ApiOkResponse({
     description: 'Success registration',
     schema: {
-      example: {
-        name: 'John',
-        age: 20,
-        email: 'johndoe@gmail.com',
-        password: null,
-        telephone: '+110000000000',
-        gender: 'Male',
-        id: 1,
-        createdAt: '2022-01-09T22:36:33.478Z',
-        token: 'Aez...',
-      },
+      example: SuccessRegisterResponseExample,
     },
   })
   @ApiBadRequestResponse({

@@ -12,6 +12,8 @@ export class RedisService {
   async get(key: string): Promise<[]> {
     return new Promise(function (resolve) {
       redis.get(key, function (err, data) {
+        console.log(data);
+
         resolve(JSON.parse(data));
       });
     });
