@@ -6,13 +6,8 @@ import { EventPattern } from '@nestjs/microservices';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
-  }
-
-  @EventPattern('NEW_HELLO')
-  createHello() {
-    console.log('New hello world in microservice item.');
+  @EventPattern('HELLO_WORLD')
+  handleHello() {
+    console.log('Hello world handler');
   }
 }

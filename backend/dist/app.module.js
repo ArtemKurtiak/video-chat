@@ -9,22 +9,52 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const microservices_1 = require("@nestjs/microservices");
-const app_controller_1 = require("./app.controller");
-const app_service_1 = require("./app.service");
+const graphql_1 = require("@nestjs/graphql");
+const config_1 = require("@nestjs/config");
+const typeorm_1 = require("@nestjs/typeorm");
+const typeorm_2 = require("typeorm");
+const auth_module_1 = require("./auth/auth.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
+            config_1.ConfigModule.forRoot({ isGlobal: true }),
+            typeorm_1.TypeOrmModule.forRootAsync({
+                imports: [config_1.ConfigModule],
+                inject: [config_1.ConfigService],
+                useFactory: async (configService) => ({
+                    type: 'postgres',
+                    host: configService.get('DATABASE_HOST'),
+                    port: 5432,
+                    username: configService.get('DATABASE_USER'),
+                    password: configService.get('DATABASE_PASSWORD'),
+                    database: configService.get('DATABASE_NAME'),
+                    synchronize: true,
+                    entities: (0, typeorm_2.getMetadataArgsStorage)().tables.map((tbl) => tbl.target),
+                }),
+            }),
             microservices_1.ClientsModule.register([
                 {
                     name: 'MESSAGING',
                     transport: microservices_1.Transport.TCP,
                 },
+                {
+                    name: 'NOTIFICATIONS',
+                    transport: microservices_1.Transport.TCP,
+                    options: {
+                        port: 3001,
+                    },
+                },
             ]),
+            graphql_1.GraphQLModule.forRoot({
+                autoSchemaFile: true,
+                playground: true,
+            }),
+            auth_module_1.AuthModule,
         ],
-        controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService],
+        controllers: [],
+        providers: [],
     })
 ], AppModule);
 exports.AppModule = AppModule;

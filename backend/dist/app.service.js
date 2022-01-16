@@ -16,21 +16,28 @@ exports.AppService = void 0;
 const common_1 = require("@nestjs/common");
 const microservices_1 = require("@nestjs/microservices");
 let AppService = class AppService {
-    constructor(messagingClient) {
+    constructor(notificationsClient, messagingClient) {
+        this.notificationsClient = notificationsClient;
         this.messagingClient = messagingClient;
     }
     getHello() {
         return 'Hello World!';
     }
     createHello() {
-        this.messagingClient.emit('NEW_HELLO', {});
+        this.notificationsClient.emit('TEST', {});
+        this.messagingClient.emit('HELLO_WORLD', {});
         return 'New hello world';
+    }
+    getNotifications() {
+        return this.notificationsClient.send({ cmd: 'GET_NOTIFICATIONS' }, {});
     }
 };
 AppService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, common_1.Inject)('MESSAGING')),
-    __metadata("design:paramtypes", [microservices_1.ClientProxy])
+    __param(0, (0, common_1.Inject)('NOTIFICATIONS')),
+    __param(1, (0, common_1.Inject)('MESSAGING')),
+    __metadata("design:paramtypes", [microservices_1.ClientProxy,
+        microservices_1.ClientProxy])
 ], AppService);
 exports.AppService = AppService;
 //# sourceMappingURL=app.service.js.map

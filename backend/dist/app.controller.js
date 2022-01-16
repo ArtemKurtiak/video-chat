@@ -22,6 +22,9 @@ let AppController = class AppController {
     createHello() {
         return this.appService.createHello();
     }
+    getNotifications() {
+        return this.appService.getNotifications();
+    }
 };
 __decorate([
     (0, common_1.Get)(),
@@ -35,6 +38,12 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], AppController.prototype, "createHello", null);
+__decorate([
+    (0, common_1.Get)('/notifications'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], AppController.prototype, "getNotifications", null);
 AppController = __decorate([
     (0, common_1.Controller)(),
     __metadata("design:paramtypes", [app_service_1.AppService])
