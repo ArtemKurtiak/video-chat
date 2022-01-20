@@ -4,7 +4,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Args, Mutation, Query } from '@nestjs/graphql';
 import { Repository } from 'typeorm';
 import { sign } from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';

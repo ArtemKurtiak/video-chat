@@ -13,14 +13,14 @@ export class AuthResolver {
   constructor(private authService: AuthService) {}
 
   @Mutation(() => AuthUser)
-  async register(
+  register(
     @Args('registerData') dto: RegisterInput,
   ): Promise<UserType & AuthType> {
     return this.authService.registerUser(dto);
   }
 
   @Query(() => AuthUser, { name: 'login', nullable: true })
-  async login(@Args() args: LoginArgs): Promise<AuthType & UserType> {
+  login(@Args() args: LoginArgs): Promise<AuthType & UserType> {
     return this.authService.loginUser(args);
   }
 }

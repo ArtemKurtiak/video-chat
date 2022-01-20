@@ -12,40 +12,33 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthResolver = void 0;
+exports.ChatResolver = void 0;
 const graphql_1 = require("@nestjs/graphql");
-const auth_service_1 = require("./auth.service");
+const common_1 = require("@nestjs/common");
+const entities_1 = require("./entities");
+const chat_service_1 = require("./chat.service");
+const entities_2 = require("../auth/entities");
+const guards_1 = require("./guards");
 const args_1 = require("./dto/args");
-const input_1 = require("./dto/input");
-const mutation_1 = require("./dto/mutation");
-let AuthResolver = class AuthResolver {
-    constructor(authService) {
-        this.authService = authService;
+let ChatResolver = class ChatResolver {
+    constructor(chatService) {
+        this.chatService = chatService;
     }
-    register(dto) {
-        return this.authService.registerUser(dto);
-    }
-    login(args) {
-        return this.authService.loginUser(args);
+    async getChats(args) {
+        return this.chatService.getChats(args);
     }
 };
 __decorate([
-    (0, graphql_1.Mutation)(() => mutation_1.AuthUser),
-    __param(0, (0, graphql_1.Args)('registerData')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [input_1.RegisterInput]),
-    __metadata("design:returntype", Promise)
-], AuthResolver.prototype, "register", null);
-__decorate([
-    (0, graphql_1.Query)(() => mutation_1.AuthUser, { name: 'login', nullable: true }),
+    (0, graphql_1.Query)(() => [entities_1.Chat]),
+    (0, common_1.UseGuards)(guards_1.CheckAuthTokenGuard),
     __param(0, (0, graphql_1.Args)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [args_1.LoginArgs]),
+    __metadata("design:paramtypes", [args_1.GetChatsArgs]),
     __metadata("design:returntype", Promise)
-], AuthResolver.prototype, "login", null);
-AuthResolver = __decorate([
-    (0, graphql_1.Resolver)(() => mutation_1.AuthUser),
-    __metadata("design:paramtypes", [auth_service_1.AuthService])
-], AuthResolver);
-exports.AuthResolver = AuthResolver;
-//# sourceMappingURL=auth.resolver.js.map
+], ChatResolver.prototype, "getChats", null);
+ChatResolver = __decorate([
+    (0, graphql_1.Resolver)(() => entities_2.User),
+    __metadata("design:paramtypes", [chat_service_1.ChatService])
+], ChatResolver);
+exports.ChatResolver = ChatResolver;
+//# sourceMappingURL=chat.resolver.js.map

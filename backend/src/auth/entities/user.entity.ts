@@ -1,9 +1,15 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Auth } from './auth.entity';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Field, InputType, Int } from '@nestjs/graphql';
+import { Chat } from '../../chat/entities';
 
 @Entity()
-@ObjectType()
+@InputType()
 export class User {
   @PrimaryGeneratedColumn()
   @Field()
@@ -11,12 +17,14 @@ export class User {
 
   @Column({
     type: 'varchar',
+    unique: false,
   })
   @Field()
   firstName: string;
 
   @Column({
     type: 'varchar',
+    unique: false,
   })
   @Field()
   lastName: string;
@@ -39,4 +47,13 @@ export class User {
   })
   @Field()
   password: string;
+
+  @ManyToMany(() => Chat, (chat) => chat.users)
+  @JoinTable({
+    joinColumn: {
+      referencedColumnName: 'id',
+    },
+    name: 'user_chat',
+  })
+  chats: Chat[];
 }

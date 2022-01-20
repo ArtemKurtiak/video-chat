@@ -9,55 +9,29 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.User = void 0;
+exports.Chat = void 0;
 const typeorm_1 = require("typeorm");
 const graphql_1 = require("@nestjs/graphql");
-const entities_1 = require("../../chat/entities");
-let User = class User {
+const entities_1 = require("../../auth/entities");
+let Chat = class Chat {
 };
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
     (0, graphql_1.Field)(),
     __metadata("design:type", Number)
-], User.prototype, "id", void 0);
+], Chat.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)({
-        type: 'varchar',
-    }),
+    (0, typeorm_1.Column)({ type: 'varchar' }),
     (0, graphql_1.Field)(),
     __metadata("design:type", String)
-], User.prototype, "firstName", void 0);
+], Chat.prototype, "title", void 0);
 __decorate([
-    (0, typeorm_1.Column)({
-        type: 'varchar',
-    }),
+    (0, typeorm_1.Column)({ type: 'varchar' }),
     (0, graphql_1.Field)(),
     __metadata("design:type", String)
-], User.prototype, "lastName", void 0);
+], Chat.prototype, "description", void 0);
 __decorate([
-    (0, typeorm_1.Column)({
-        type: 'integer',
-        nullable: true,
-    }),
-    (0, graphql_1.Field)(() => graphql_1.Int),
-    __metadata("design:type", Number)
-], User.prototype, "age", void 0);
-__decorate([
-    (0, typeorm_1.Column)({
-        type: 'varchar',
-    }),
-    (0, graphql_1.Field)(),
-    __metadata("design:type", String)
-], User.prototype, "email", void 0);
-__decorate([
-    (0, typeorm_1.Column)({
-        type: 'varchar',
-    }),
-    (0, graphql_1.Field)(),
-    __metadata("design:type", String)
-], User.prototype, "password", void 0);
-__decorate([
-    (0, typeorm_1.ManyToMany)(() => entities_1.Chat, (chat) => chat.users),
+    (0, typeorm_1.ManyToMany)(() => entities_1.User, (user) => user.chats),
     (0, typeorm_1.JoinTable)({
         joinColumn: {
             referencedColumnName: 'id',
@@ -65,10 +39,10 @@ __decorate([
         name: 'user_chat',
     }),
     __metadata("design:type", Array)
-], User.prototype, "chats", void 0);
-User = __decorate([
+], Chat.prototype, "users", void 0);
+Chat = __decorate([
     (0, typeorm_1.Entity)(),
-    (0, graphql_1.InputType)()
-], User);
-exports.User = User;
-//# sourceMappingURL=user.entity.js.map
+    (0, graphql_1.ObjectType)()
+], Chat);
+exports.Chat = Chat;
+//# sourceMappingURL=chat.entity.js.map

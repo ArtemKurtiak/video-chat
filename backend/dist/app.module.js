@@ -14,6 +14,7 @@ const config_1 = require("@nestjs/config");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const auth_module_1 = require("./auth/auth.module");
+const chat_module_1 = require("./chat/chat.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -52,6 +53,7 @@ AppModule = __decorate([
                 playground: true,
             }),
             auth_module_1.AuthModule,
+            chat_module_1.ChatModule,
         ],
         controllers: [],
         providers: [],

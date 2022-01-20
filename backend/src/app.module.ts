@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { getMetadataArgsStorage } from 'typeorm';
 
 import { AuthModule } from './auth/auth.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { AuthModule } from './auth/auth.module';
       playground: true,
     }),
     AuthModule,
+    ChatModule,
   ],
   controllers: [],
   providers: [],
