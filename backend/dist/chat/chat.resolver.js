@@ -15,11 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChatResolver = void 0;
 const graphql_1 = require("@nestjs/graphql");
 const common_1 = require("@nestjs/common");
-const entities_1 = require("./entities");
 const chat_service_1 = require("./chat.service");
-const entities_2 = require("../auth/entities");
+const entities_1 = require("../auth/entities");
 const guards_1 = require("./guards");
 const args_1 = require("./dto/args");
+const query_1 = require("./dto/query");
+const message_1 = require("./dto/query/message");
 let ChatResolver = class ChatResolver {
     constructor(chatService) {
         this.chatService = chatService;
@@ -27,17 +28,27 @@ let ChatResolver = class ChatResolver {
     async getChats(args) {
         return this.chatService.getChats(args);
     }
+    async getMessages(args) {
+        return this.chatService.getMessagesByChat(args.chatId);
+    }
 };
 __decorate([
-    (0, graphql_1.Query)(() => [entities_1.Chat]),
-    (0, common_1.UseGuards)(guards_1.CheckAuthTokenGuard),
+    (0, graphql_1.Query)(() => [query_1.ChatWithLastMessage]),
     __param(0, (0, graphql_1.Args)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [args_1.GetChatsArgs]),
     __metadata("design:returntype", Promise)
 ], ChatResolver.prototype, "getChats", null);
+__decorate([
+    (0, graphql_1.Query)(() => [message_1.MessageOT]),
+    __param(0, (0, graphql_1.Args)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [args_1.GetMessagesArgs]),
+    __metadata("design:returntype", Promise)
+], ChatResolver.prototype, "getMessages", null);
 ChatResolver = __decorate([
-    (0, graphql_1.Resolver)(() => entities_2.User),
+    (0, graphql_1.Resolver)(() => entities_1.User),
+    (0, common_1.UseGuards)(guards_1.CheckAuthTokenGuard),
     __metadata("design:paramtypes", [chat_service_1.ChatService])
 ], ChatResolver);
 exports.ChatResolver = ChatResolver;

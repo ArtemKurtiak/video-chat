@@ -17,9 +17,11 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const entities_1 = require("../auth/entities");
+const entities_2 = require("./entities");
 let ChatService = class ChatService {
-    constructor(userRepository) {
+    constructor(userRepository, messageRepository) {
         this.userRepository = userRepository;
+        this.messageRepository = messageRepository;
     }
     async getChats(dto) {
         const user = await this.userRepository.findOne({
@@ -28,13 +30,34 @@ let ChatService = class ChatService {
             },
             relations: ['chats'],
         });
-        return user.chats;
+        const chats = await Promise.all(user.chats.map(async (item) => {
+            const lastMessage = await this.messageRepository.findOne({
+                where: {
+                    chat: item.id,
+                },
+                order: {
+                    id: 'DESC',
+                },
+            });
+            return Object.assign(Object.assign({}, item), { lastMessage });
+        }));
+        return chats;
+    }
+    async getMessagesByChat(chatId) {
+        const messages = await this.messageRepository.find({
+            where: {
+                chat: chatId,
+            },
+        });
+        return messages;
     }
 };
 ChatService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(entities_1.User)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __param(1, (0, typeorm_1.InjectRepository)(entities_2.Message)),
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        typeorm_2.Repository])
 ], ChatService);
 exports.ChatService = ChatService;
 //# sourceMappingURL=chat.service.js.map

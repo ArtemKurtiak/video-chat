@@ -20,7 +20,10 @@ let ChatModule = class ChatModule {
 ChatModule = __decorate([
     (0, common_1.Module)({
         providers: [chat_resolver_1.ChatResolver, chat_service_1.ChatService, guards_1.CheckAuthTokenGuard],
-        imports: [typeorm_1.TypeOrmModule.forFeature([entities_1.Chat, entities_2.User, entities_2.Auth]), config_1.ConfigModule],
+        imports: [
+            typeorm_1.TypeOrmModule.forFeature([entities_1.Chat, entities_2.User, entities_2.Auth, entities_1.Message]),
+            config_1.ConfigModule,
+        ],
     })
 ], ChatModule);
 exports.ChatModule = ChatModule;

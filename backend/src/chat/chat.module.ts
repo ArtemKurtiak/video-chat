@@ -4,12 +4,15 @@ import { ConfigModule } from '@nestjs/config';
 
 import { ChatResolver } from './chat.resolver';
 import { ChatService } from './chat.service';
-import { Chat } from './entities';
+import { Chat, Message } from './entities';
 import { Auth, User } from '../auth/entities';
 import { CheckAuthTokenGuard } from './guards';
 
 @Module({
   providers: [ChatResolver, ChatService, CheckAuthTokenGuard],
-  imports: [TypeOrmModule.forFeature([Chat, User, Auth]), ConfigModule],
+  imports: [
+    TypeOrmModule.forFeature([Chat, User, Auth, Message]),
+    ConfigModule,
+  ],
 })
 export class ChatModule {}

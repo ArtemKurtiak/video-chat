@@ -23,6 +23,7 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)({
         type: 'varchar',
+        unique: false,
     }),
     (0, graphql_1.Field)(),
     __metadata("design:type", String)
@@ -30,6 +31,7 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)({
         type: 'varchar',
+        unique: false,
     }),
     (0, graphql_1.Field)(),
     __metadata("design:type", String)
@@ -52,6 +54,7 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)({
         type: 'varchar',
+        select: false,
     }),
     (0, graphql_1.Field)(),
     __metadata("design:type", String)

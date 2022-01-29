@@ -1,5 +1,5 @@
 import { User } from '../../../auth/entities';
-export declare class GetChatsArgs {
-    token: string;
+import { TokenArgs } from '../../../common/dto/args';
+export declare class GetChatsArgs extends TokenArgs {
     user: User;
 }

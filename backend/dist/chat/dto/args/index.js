@@ -11,4 +11,5 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./get-chats.args"), exports);
+__exportStar(require("./get-messages.args"), exports);
 //# sourceMappingURL=index.js.map

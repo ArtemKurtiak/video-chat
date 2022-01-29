@@ -12,12 +12,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetChatsArgs = void 0;
 const graphql_1 = require("@nestjs/graphql");
 const entities_1 = require("../../../auth/entities");
-let GetChatsArgs = class GetChatsArgs {
+const args_1 = require("../../../common/dto/args");
+let GetChatsArgs = class GetChatsArgs extends args_1.TokenArgs {
 };
-__decorate([
-    (0, graphql_1.Field)(),
-    __metadata("design:type", String)
-], GetChatsArgs.prototype, "token", void 0);
 __decorate([
     (0, graphql_1.Field)(() => entities_1.User, { nullable: true }),
     __metadata("design:type", entities_1.User)

@@ -5,7 +5,7 @@ import {
   ManyToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Field, InputType, Int } from '@nestjs/graphql';
+import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
 import { Chat } from '../../chat/entities';
 
 @Entity()
@@ -44,6 +44,7 @@ export class User {
 
   @Column({
     type: 'varchar',
+    select: false,
   })
   @Field()
   password: string;

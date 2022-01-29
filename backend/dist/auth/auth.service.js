@@ -69,6 +69,7 @@ let AuthService = class AuthService {
             where: {
                 email,
             },
+            select: ['password', 'id'],
         });
         if (!user) {
             throw new common_1.UnauthorizedException('Invalid credentials');
