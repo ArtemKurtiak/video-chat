@@ -21,10 +21,12 @@ const bcrypt = require("bcrypt");
 const config_1 = require("@nestjs/config");
 const entities_1 = require("./entities");
 const entities_2 = require("./entities");
+const microservices_1 = require("@nestjs/microservices");
 let AuthService = class AuthService {
-    constructor(userRepository, authRepository, configService) {
+    constructor(userRepository, authRepository, sendGridClient, configService) {
         this.userRepository = userRepository;
         this.authRepository = authRepository;
+        this.sendGridClient = sendGridClient;
         this.configService = configService;
     }
     async _generateToken(userId) {
@@ -61,6 +63,10 @@ let AuthService = class AuthService {
         const user = await this.userRepository.create(Object.assign(Object.assign({}, dto), { password: hashedPassword }));
         const { id } = await this.userRepository.save(user);
         const auth = await this._generateToken(id);
+        this.sendGridClient.emit('send-email', {
+            email,
+            template: 'd-df3ec4816e114159a317002c2229cd95',
+        });
         return Object.assign(Object.assign({}, auth), user);
     }
     async loginUser(args) {
@@ -69,22 +75,24 @@ let AuthService = class AuthService {
             where: {
                 email,
             },
-            select: ['password', 'id'],
+            select: ['id', 'email', 'password', 'age', 'firstName', 'lastName'],
         });
         if (!user) {
             throw new common_1.UnauthorizedException('Invalid credentials');
         }
         await this._comparePasswords(password, user.password);
         const token = await this._generateToken(user.id);
-        return Object.assign(Object.assign({}, token), user);
+        return Object.assign(Object.assign(Object.assign({}, token), user), { password: null });
     }
 };
 AuthService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(entities_1.User)),
     __param(1, (0, typeorm_1.InjectRepository)(entities_2.Auth)),
+    __param(2, (0, common_1.Inject)('SEND_GRID')),
     __metadata("design:paramtypes", [typeorm_2.Repository,
         typeorm_2.Repository,
+        microservices_1.ClientProxy,
         config_1.ConfigService])
 ], AuthService);
 exports.AuthService = AuthService;

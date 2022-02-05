@@ -19,9 +19,10 @@ const typeorm_2 = require("typeorm");
 const entities_1 = require("../auth/entities");
 const entities_2 = require("./entities");
 let ChatService = class ChatService {
-    constructor(userRepository, messageRepository) {
+    constructor(userRepository, messageRepository, chatRepository) {
         this.userRepository = userRepository;
         this.messageRepository = messageRepository;
+        this.chatRepository = chatRepository;
     }
     async getChats(dto) {
         const user = await this.userRepository.findOne({
@@ -44,19 +45,26 @@ let ChatService = class ChatService {
         return chats;
     }
     async getMessagesByChat(chatId) {
+        const chat = await this.chatRepository.findOne({
+            where: {
+                id: chatId,
+            },
+        });
         const messages = await this.messageRepository.find({
             where: {
                 chat: chatId,
             },
         });
-        return messages;
+        return Object.assign(Object.assign({}, chat), { messages });
     }
 };
 ChatService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(entities_1.User)),
     __param(1, (0, typeorm_1.InjectRepository)(entities_2.Message)),
+    __param(2, (0, typeorm_1.InjectRepository)(entities_2.Chat)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
+        typeorm_2.Repository,
         typeorm_2.Repository])
 ], ChatService);
 exports.ChatService = ChatService;

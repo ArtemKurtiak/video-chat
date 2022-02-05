@@ -11,5 +11,11 @@ export declare class ChatResolver {
         description: string;
         users: User[];
     }[]>;
-    getMessages(args: GetMessagesArgs): Promise<import("./entities").Message[]>;
+    getMessages(args: GetMessagesArgs): Promise<{
+        messages: import("./entities").Message[];
+        id: number;
+        title: string;
+        description: string;
+        users: User[];
+    }>;
 }

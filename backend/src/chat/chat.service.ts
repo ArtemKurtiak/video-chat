@@ -4,13 +4,14 @@ import { Repository } from 'typeorm';
 
 import { User } from '../auth/entities';
 import { GetChatsArgs } from './dto/args';
-import { Message } from './entities';
+import { Chat, Message } from './entities';
 
 @Injectable()
 export class ChatService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(Message) private messageRepository: Repository<Message>,
+    @InjectRepository(Chat) private chatRepository: Repository<Chat>,
   ) {}
 
   async getChats(dto: GetChatsArgs) {
@@ -40,12 +41,21 @@ export class ChatService {
   }
 
   async getMessagesByChat(chatId: number) {
+    const chat = await this.chatRepository.findOne({
+      where: {
+        id: chatId,
+      },
+    });
+
     const messages = await this.messageRepository.find({
       where: {
         chat: chatId,
       },
     });
 
-    return messages;
+    return {
+      ...chat,
+      messages,
+    };
   }
 }

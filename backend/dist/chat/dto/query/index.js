@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ChatWithLastMessage = void 0;
+exports.ChatMessages = exports.ChatWithLastMessage = void 0;
 const graphql_1 = require("@nestjs/graphql");
 const entities_1 = require("../../entities");
 const message_1 = require("./message");
@@ -23,4 +23,14 @@ ChatWithLastMessage = __decorate([
     (0, graphql_1.ObjectType)()
 ], ChatWithLastMessage);
 exports.ChatWithLastMessage = ChatWithLastMessage;
+let ChatMessages = class ChatMessages extends entities_1.Chat {
+};
+__decorate([
+    (0, graphql_1.Field)(() => [message_1.MessageOT]),
+    __metadata("design:type", Array)
+], ChatMessages.prototype, "messages", void 0);
+ChatMessages = __decorate([
+    (0, graphql_1.ObjectType)()
+], ChatMessages);
+exports.ChatMessages = ChatMessages;
 //# sourceMappingURL=index.js.map

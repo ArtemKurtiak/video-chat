@@ -1,15 +1,12 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
-import { User } from '../../entities';
+import { UserOT } from '../../../chat/dto/query/user';
 
 @ObjectType()
-export class AuthUser extends User {
+export class AuthUser extends UserOT {
   @Field()
   id: number;
 
   @Field()
   token: string;
-
-  @Field()
-  user: string;
 }

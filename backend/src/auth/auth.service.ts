@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -14,12 +15,14 @@ import { AuthType, UserType } from './types';
 import { Auth } from './entities';
 import { LoginArgs } from './dto/args';
 import { RegisterInput } from './dto/input';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(Auth) private authRepository: Repository<Auth>,
+    @Inject('SEND_GRID') private sendGridClient: ClientProxy,
     private configService: ConfigService,
   ) {}
 
@@ -74,6 +77,11 @@ export class AuthService {
 
     const auth = await this._generateToken(id);
 
+    this.sendGridClient.emit('send-email', {
+      email,
+      template: 'd-df3ec4816e114159a317002c2229cd95',
+    });
+
     return {
       ...auth,
       ...user,
@@ -87,7 +95,7 @@ export class AuthService {
       where: {
         email,
       },
-      select: ['password', 'id'],
+      select: ['id', 'email', 'password', 'age', 'firstName', 'lastName'],
     });
 
     if (!user) {
@@ -101,6 +109,7 @@ export class AuthService {
     return {
       ...token,
       ...user,
+      password: null,
     };
   }
 }

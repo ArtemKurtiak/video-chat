@@ -1,7 +1,5 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { extend } from '@nestjs/graphql/dist/utils';
 
-import { Auth, User } from './entities';
 import { AuthType, UserType } from './types';
 import { AuthService } from './auth.service';
 import { LoginArgs } from './dto/args';

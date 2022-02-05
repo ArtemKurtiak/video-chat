@@ -20,7 +20,6 @@ const entities_1 = require("../auth/entities");
 const guards_1 = require("./guards");
 const args_1 = require("./dto/args");
 const query_1 = require("./dto/query");
-const message_1 = require("./dto/query/message");
 let ChatResolver = class ChatResolver {
     constructor(chatService) {
         this.chatService = chatService;
@@ -40,7 +39,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ChatResolver.prototype, "getChats", null);
 __decorate([
-    (0, graphql_1.Query)(() => [message_1.MessageOT]),
+    (0, graphql_1.Query)(() => query_1.ChatMessages),
     __param(0, (0, graphql_1.Args)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [args_1.GetMessagesArgs]),

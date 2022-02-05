@@ -11,8 +11,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthUser = void 0;
 const graphql_1 = require("@nestjs/graphql");
-const entities_1 = require("../../entities");
-let AuthUser = class AuthUser extends entities_1.User {
+const user_1 = require("../../../chat/dto/query/user");
+let AuthUser = class AuthUser extends user_1.UserOT {
 };
 __decorate([
     (0, graphql_1.Field)(),
@@ -22,10 +22,6 @@ __decorate([
     (0, graphql_1.Field)(),
     __metadata("design:type", String)
 ], AuthUser.prototype, "token", void 0);
-__decorate([
-    (0, graphql_1.Field)(),
-    __metadata("design:type", String)
-], AuthUser.prototype, "user", void 0);
 AuthUser = __decorate([
     (0, graphql_1.ObjectType)()
 ], AuthUser);

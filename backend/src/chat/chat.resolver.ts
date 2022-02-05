@@ -5,8 +5,7 @@ import { ChatService } from './chat.service';
 import { User } from '../auth/entities';
 import { CheckAuthTokenGuard } from './guards';
 import { GetChatsArgs, GetMessagesArgs } from './dto/args';
-import { ChatWithLastMessage } from './dto/query';
-import { MessageOT } from './dto/query/message';
+import { ChatMessages, ChatWithLastMessage } from './dto/query';
 
 @Resolver(() => User)
 @UseGuards(CheckAuthTokenGuard)
@@ -18,7 +17,7 @@ export class ChatResolver {
     return this.chatService.getChats(args);
   }
 
-  @Query(() => [MessageOT])
+  @Query(() => ChatMessages)
   async getMessages(@Args() args: GetMessagesArgs) {
     return this.chatService.getMessagesByChat(args.chatId);
   }

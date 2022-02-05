@@ -8,3 +8,9 @@ export class ChatWithLastMessage extends Chat {
   @Field({ nullable: true })
   lastMessage: MessageOT;
 }
+
+@ObjectType()
+export class ChatMessages extends Chat {
+  @Field(() => [MessageOT])
+  messages: MessageOT[];
+}

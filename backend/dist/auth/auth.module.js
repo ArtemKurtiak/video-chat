@@ -11,16 +11,28 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const config_1 = require("@nestjs/config");
 const entities_1 = require("./entities");
-const entities_2 = require("./entities");
 const auth_resolver_1 = require("./auth.resolver");
 const auth_service_1 = require("./auth.service");
+const microservices_1 = require("@nestjs/microservices");
 let AuthModule = class AuthModule {
 };
 AuthModule = __decorate([
     (0, common_1.Module)({
         providers: [auth_resolver_1.AuthResolver, auth_service_1.AuthService],
         controllers: [],
-        imports: [typeorm_1.TypeOrmModule.forFeature([entities_1.User, entities_2.Auth]), config_1.ConfigModule],
+        imports: [
+            typeorm_1.TypeOrmModule.forFeature([entities_1.User, entities_1.Auth]),
+            config_1.ConfigModule,
+            microservices_1.ClientsModule.register([
+                {
+                    name: 'SEND_GRID',
+                    transport: microservices_1.Transport.TCP,
+                    options: {
+                        port: 3002,
+                    },
+                },
+            ]),
+        ],
     })
 ], AuthModule);
 exports.AuthModule = AuthModule;
